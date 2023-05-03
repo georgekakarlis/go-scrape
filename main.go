@@ -5,7 +5,12 @@ import (
 	"os"
 
 	"github.com/gofiber/fiber/v2"
+	"github.com/gofiber/helmet/v2"
+	"github.com/goscrape/api/routes"
 	"github.com/goscrape/initializers"
+
+	"github.com/gofiber/fiber/v2/middleware/logger"
+	"github.com/gofiber/fiber/v2/middleware/recover"
 )
 
 func init() {
@@ -13,32 +18,19 @@ func init() {
 }
 
 func main() {
-  
-	//db connect	 
-	
-
+ 
   // Create new Fiber instance
 	app := fiber.New()
  	
-	//main router
-  
+	// attach middlewares
+	app.Use(recover.New())	//Recover middleware for Fiber that recovers from panics anywhere in the stack chain and handles the control to the centralized ErrorHandler.
+	app.Use(logger.New(logger.Config{		////Logger middleware for Fiber that logs HTTP request/response details.
+		Format: "[${ip}]:${port} ${status} - ${method} ${path} ${latency}\n",
+	}))		
+	app.Use(helmet.New())		//helmet middleware :)
 
-  //middlewares
-  
-
-
-  // base route
- 
-  //healthcheck
-  app.Get("/api/healthchecker", func(c *fiber.Ctx) error {
-	return c.Status(200).JSON(fiber.Map{
-		"status":  "success",
-		"message": "Since you are curious, dm us k? or not :)",
-	})
-})
-
-  
-  //routes declaration
+	// setup routes
+	routes.SetupRoutes(app)
   
 
   	port := "8080"
