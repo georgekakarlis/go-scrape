@@ -11,5 +11,5 @@ type ScrapeWebsite struct {
 
 type User struct {
 	gorm.Model
-	Id  string `json:id`
+	Id  string `json:id gorm`
 }
