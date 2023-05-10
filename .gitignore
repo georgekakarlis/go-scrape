@@ -36,12 +36,12 @@ helpers.md
 *.out
 
 # Dependency directories (remove the comment below to include it)
-# vendor/
+vendor/
 .DS_Store
 TODO.md
 logs.txt
 .idea/
 secret.md
-# app.env
+app.env
 tmp
 scrape.db

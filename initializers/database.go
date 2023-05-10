@@ -4,7 +4,6 @@ import (
 	"log"
 	"os"
 
-	"github.com/goscrape/models"
 	"gorm.io/driver/sqlite"
 	"gorm.io/gorm"
 	"gorm.io/gorm/logger"
@@ -25,7 +24,7 @@ func ConnectDB() {
 	DB.Logger = logger.Default.LogMode(logger.Info)
 
 	log.Println("Running Migrations")
-	DB.AutoMigrate(&models.ScrapeWebsite{})
+	DB.AutoMigrate()
 
 	log.Println("🚀 Connected Successfully to the Database")
 }
