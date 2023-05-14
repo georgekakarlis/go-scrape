@@ -9,12 +9,7 @@ import (
 
 func ScrapeURL(url string) []string {
 
-	/* URL := r.URL.Query().Get("url")
-	if URL == "" {
-		log.Println("missing URL argument")
-		return
-	}
-	log.Println("visiting", URL) */
+	
 
 	//colly
 	c := colly.NewCollector()

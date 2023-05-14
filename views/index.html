@@ -10,12 +10,51 @@
     
     <h1>hey</h1>
 
-    <form action="/process" method="POST">
+    <form id="myForm" action="/process" method="POST">
 
         <label for="url">Enter URL here</label>
         <input type="text" name="url" id="url" placeholder="URL">
 
-        <input type="submit">
+        <input type="checkbox" name="generateCSV" id="generateCSV" checked>
+        <label for="generateCSV">Generate CSV</label>
+
+        <input type="submit" id="submit">
+
+        <a id="downloadButton" style="display: none;">Download CSV</a>
     </form>
+
+    
+
+    <script>
+        
+        // Submit the form and handle the response
+    document.querySelector('myForm').addEventListener('submit', function(event) {
+    event.preventDefault();
+
+    fetch('/process', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ url: document.getElementById('url').value })
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data && data.filePath) {
+            console.log('Valid file path:', data.filePath);
+
+            // Show the download link
+            const downloadLink = document.getElementById('downloadButton');
+            downloadLink.href = '/download/' + encodeURIComponent(data.filePath);
+            downloadLink.style.display = 'inline';
+        } else {
+            console.error('Invalid file path');
+        }
+    })
+    .catch(error => {
+        console.error('An error occurred:', error);
+    });
+});
+    </script>
 </body>
 </html>

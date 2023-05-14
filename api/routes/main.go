@@ -18,8 +18,12 @@ func SetupRoutes(app *fiber.App) {
 		})
 	})
 
+	// POST to handle the form
 	app.Post("/process", handlers.ProcessForm)
 
+	// GET to handle the download of the ready made file
+	app.Get("/download", handlers.DownloadCsvFile)
+	app.Get("/download:filepath", handlers.DownloadCsvFile)
 
 	// 404 Handler
 	app.Use(func(c *fiber.Ctx) error {
@@ -34,12 +38,5 @@ func SetupRoutes(app *fiber.App) {
 	user.Get("/:id")
 	user.Delete("/:id") */
 
-	//setup the scrape route group
-	//controllers missing
-	/* scrapeit := app.Group("/scrapeit")
-	scrapeit.Get("/")
-	scrapeit.Post("/")
-	scrapeit.Put("/")
-	scrapeit.Patch("/")
-	scrapeit.Delete("/") */
+	
 }

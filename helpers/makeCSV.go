@@ -1,26 +1,48 @@
 package helpers
 
 import (
-	"encoding/csv"
-	"log"
+	"fmt"
 	"os"
+	"path/filepath"
+	"strings"
 )
 
-//makeCSV function will help us create a function that is gonna create a csv file from the scraped data
+// MakeCSV function will help us create a function that is gonna create a csv file from the scraped data
+//the ioutil.TempFile function is used to create a temporary file with the prefix "scraped_data" and the .csv extension.
+//The TempFile function automatically generates a unique name for the temporary file.
 
 
-func makeCSV() {
-	filename := "your-data.csv"
-    file, err := os.Create(filename)
-    if err != nil {
-     log.Fatalf("could not create the file, err :%q",err)
-     return
-    }
-    defer file.Close()
+func MakeCSV(scrapedData []string, directory string) (string, error) {
+	// Ensure that the directory exists
+	if _, err := os.Stat("directory"); os.IsNotExist(err) {
+		// Directory does not exist, create it
+		err := os.Mkdir("directory", 0755) // Specify the desired directory permissions (e.g., 0755)
+		if err != nil {
+			fmt.Println("Failed to create directory:", err)
+			return "", err
+		}
+	}
 
-	//The next thing we do with a writer once we are done writing the file, 
-	//we throw everything from the buffer into the writer, which can later be passed onto the file. For that, we will use Flush.
-	//This process has to be performed afterward and not right away. So, we add the keyword defer.
-	writer := csv.NewWriter(file)
-	defer writer.Flush()
+	filePath := filepath.Join(directory, "scraped_data.csv")
+
+	file, err := os.Create(filePath)
+	if err != nil {
+		fmt.Println("Failed to create file:", err)
+		return "", err
+	}
+
+	defer func() {
+		_ = file.Close()
+		_ = os.Remove(file.Name()) // Remove the temporary file if not already deleted
+	}()
+
+	// Write scrapedData to the file
+	content := []byte(strings.Join(scrapedData, "\n"))
+	_, err = file.Write(content)
+	if err != nil {
+		fmt.Println("Failed to write to file:", err)
+		return "", err
+	}
+
+	return file.Name(), nil
 }

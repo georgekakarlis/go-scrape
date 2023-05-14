@@ -2,10 +2,10 @@ package handlers
 
 import (
 	"fmt"
-	"strings"
 	"time"
 
 	"github.com/gofiber/fiber/v2"
+	"goscrape.com/helpers"
 	"goscrape.com/scrape"
 
 	"github.com/xuri/excelize/v2"
@@ -14,6 +14,9 @@ import (
 func ProcessForm(c *fiber.Ctx) error {
 
 	url := c.FormValue("url")
+	// Validate the URL entered by the user
+	
+	
 	format := c.Query("format", "json")
 
 	scrapedData := scrape.ScrapeURL(url)
@@ -21,8 +24,14 @@ func ProcessForm(c *fiber.Ctx) error {
 	// Check the output format requested by the user
 	switch format {
 	case "csv":
-		// Generate CSV output
-		return c.SendString(strings.Join(scrapedData, ","))
+        // Generate CSV output
+        filePath, err := helpers.MakeCSV(scrapedData, "directory")
+        if err != nil {
+            fmt.Println("Failed to generate CSV:", err)
+            return err
+        }
+        return c.JSON(fiber.Map{"filePath": filePath})
+	
 	case "xlsx":
 		// Generate XLSX output
 		f := excelize.NewFile()
@@ -43,10 +52,11 @@ func ProcessForm(c *fiber.Ctx) error {
 		}
 		f.SetActiveSheet(sheetIndex)
 		filename := fmt.Sprintf("%s.xlsx", time.Now().Format("2006-01-02_15-04-05"))
-		return c.SendFile(f, filename, true)
+		return c.SendFile(filename)
 
 	default:
 		// Default to JSON output
 		return c.JSON(scrapedData)
 	}
 }
+
