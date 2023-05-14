@@ -5,9 +5,9 @@ import (
 	"os"
 
 	"github.com/gofiber/fiber/v2"
-	"github.com/goscrape/api/routes"
-	"github.com/goscrape/initializers"
-	"github.com/goscrape/middlewares"
+	"goscrape.com/api/routes"
+	"goscrape.com/initializers"
+	"goscrape.com/middlewares"
 
 	"github.com/gofiber/template/html/v2"
 )
@@ -30,9 +30,6 @@ func main() {
 
 	app.Static("/", "./public")
 
-		
-
-	
 	//set middlewares
 	middlewares.SetMiddlewares(app)
 	// setup routes

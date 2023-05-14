@@ -1,4 +1,4 @@
-module github.com/goscrape
+module goscrape.com
 
 go 1.20
 

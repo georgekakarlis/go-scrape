@@ -6,7 +6,7 @@ import (
 	"time"
 
 	"github.com/gofiber/fiber/v2"
-	"github.com/goscrape/scrape"
+	"goscrape.com/scrape"
 
 	"github.com/xuri/excelize/v2"
 )
@@ -16,13 +16,13 @@ func ProcessForm(c *fiber.Ctx) error {
 	url := c.FormValue("url")
 	format := c.Query("format", "json")
 
-    scrapedData := scrape.ScrapeURL(url)
+	scrapedData := scrape.ScrapeURL(url)
 
-    // Check the output format requested by the user
-    switch format {
-    case "csv":
-        // Generate CSV output
-        return c.SendString(strings.Join(scrapedData, ","))
+	// Check the output format requested by the user
+	switch format {
+	case "csv":
+		// Generate CSV output
+		return c.SendString(strings.Join(scrapedData, ","))
 	case "xlsx":
 		// Generate XLSX output
 		f := excelize.NewFile()
@@ -31,7 +31,7 @@ func ProcessForm(c *fiber.Ctx) error {
 				fmt.Println(err)
 			}
 		}()
-		sheetName := "Sheet1"
+		sheetName := "New Scraped Data"
 		sheetIndex, err := f.NewSheet(sheetName)
 		if err != nil {
 			fmt.Println(err)
@@ -43,11 +43,10 @@ func ProcessForm(c *fiber.Ctx) error {
 		}
 		f.SetActiveSheet(sheetIndex)
 		filename := fmt.Sprintf("%s.xlsx", time.Now().Format("2006-01-02_15-04-05"))
-		return c.SendFile(f, filename, fmt.Sprintf("attachment; filename=%s", filename))
-	
-	
-    default:
-        // Default to JSON output
-        return c.JSON(scrapedData)
-    }
+		return c.SendFile(f, filename, true)
+
+	default:
+		// Default to JSON output
+		return c.JSON(scrapedData)
+	}
 }

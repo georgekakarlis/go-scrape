@@ -9,6 +9,7 @@ import (
 	"gorm.io/gorm/logger"
 )
 
+// connect db. SQLITE
 
 var DB *gorm.DB
 

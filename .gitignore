@@ -19,7 +19,7 @@
 .env
 
 .helpers.md
-*md
+
 helpers.md
 
 # Binaries for programs and plugins
@@ -41,7 +41,7 @@ vendor/
 TODO.md
 logs.txt
 .idea/
-secret.md
+
 app.env
 tmp
 scrape.db
