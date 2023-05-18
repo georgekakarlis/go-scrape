@@ -23,7 +23,7 @@ func SetupRoutes(app *fiber.App) {
 
 	// GET to handle the download of the ready made file
 	app.Get("/download", handlers.DownloadCsvFile)
-	app.Get("/download:filepath", handlers.DownloadCsvFile)
+	
 
 	// 404 Handler
 	app.Use(func(c *fiber.Ctx) error {

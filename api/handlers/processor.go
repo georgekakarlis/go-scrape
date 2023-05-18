@@ -1,62 +1,55 @@
 package handlers
 
 import (
-	"fmt"
-	"time"
-
 	"github.com/gofiber/fiber/v2"
 	"goscrape.com/helpers"
 	"goscrape.com/scrape"
-
-	"github.com/xuri/excelize/v2"
 )
 
+// ProcessForm handles the form submission
 func ProcessForm(c *fiber.Ctx) error {
+	// Retrieve the form data
+	form := new(struct {
+		URL          string `form:"url"`
+		GenerateFILE string `form:"generateFILE"`
+	})
 
-	url := c.FormValue("url")
+	if err := c.BodyParser(form); err != nil {
+		return c.Status(fiber.StatusBadRequest).SendString("Invalid form data")
+	}
+
 	// Validate the URL entered by the user
-	
-	
-	format := c.Query("format", "json")
+	// further regex validation ==TODO==
+	if form.URL == "" {
+		return c.Status(fiber.StatusBadRequest).SendString("Please enter a URL")
+	}
 
-	scrapedData := scrape.ScrapeURL(url)
+	// Scrape the URL
+	scrapedData := scrape.ScrapeURL(form.URL)
 
 	// Check the output format requested by the user
-	switch format {
-	case "csv":
-        // Generate CSV output
-        filePath, err := helpers.MakeCSV(scrapedData, "directory")
-        if err != nil {
-            fmt.Println("Failed to generate CSV:", err)
-            return err
-        }
-        return c.JSON(fiber.Map{"filePath": filePath})
-	
-	case "xlsx":
-		// Generate XLSX output
-		f := excelize.NewFile()
-		defer func() {
-			if err := f.Close(); err != nil {
-				fmt.Println(err)
-			}
-		}()
-		sheetName := "New Scraped Data"
-		sheetIndex, err := f.NewSheet(sheetName)
+	switch form.GenerateFILE {
+	case "generateCSV":
+		// Generate CSV output
+		fileName, err := helpers.MakeCSV(scrapedData)
 		if err != nil {
-			fmt.Println(err)
-			return err
+			return c.Status(fiber.StatusInternalServerError).SendString("Failed to generate CSV")
 		}
-		for i, link := range scrapedData {
-			cellName := fmt.Sprintf("A%d", i+1)
-			f.SetCellValue(sheetName, cellName, link)
-		}
-		f.SetActiveSheet(sheetIndex)
-		filename := fmt.Sprintf("%s.xlsx", time.Now().Format("2006-01-02_15-04-05"))
-		return c.SendFile(filename)
+		return c.JSON(fiber.Map{"filePath": fileName})
 
-	default:
+	case "generateXLSX":
+		// generate Excel output
+
+	case "generatePDF":
+		// Generate PDF output and
+		// replace the return statement with the appropriate code
+
+	case "generateJSON":
 		// Default to JSON output
 		return c.JSON(scrapedData)
 	}
-}
 
+	// Handle an invalid or unsupported format
+	return c.Status(fiber.StatusBadRequest).SendString("Invalid format selected")
+
+}
