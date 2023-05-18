@@ -41,13 +41,20 @@ func DownloadCsvFile(c *fiber.Ctx) error {
 			return err // Return the error directly
 		}
 
+			// Delete the file
+	if err := os.Remove(filePath); err != nil {
+		fmt.Printf("Failed to delete file: %v\n", err)
+	}
+
+		return nil
+			
+}
 /* 	// Delete the downloaded file
 	if err := deleteDownloadedFile(filePath); err != nil {
 		return err // Return the error directly
 	} */
 
-	return nil
-}
+
 
 /* func deleteDownloadedFile(filePath string) error {
 	allowedDirectories := []string{"./downloads/CSV", "./downloads/XLSX", "./downloads/PDF", "./downloads/JSON"}
