@@ -26,6 +26,7 @@ func main() {
 	// Create new Fiber instance
 	app := fiber.New(fiber.Config{
 		Views: engine,
+		ViewsLayout: "layouts/main",
 	})
 
 	app.Static("/", "./public")

@@ -36,12 +36,12 @@ func DownloadCsvFile(c *fiber.Ctx) error {
 	c.Set(fiber.HeaderContentDisposition, fmt.Sprintf("attachment; filename=%s", filepath.Base(filePath)))
 	c.Set(fiber.HeaderContentLength, strconv.FormatInt(fileSize, 10))
 
-		// Send the file as the response body
-		if err := c.SendFile(filePath); err != nil {
-			return err // Return the error directly
+	// Send the file as the response body
+	if err := c.SendFile(filePath); err != nil {
+		return err // Return the error directly
 		}
 
-			// Delete the file
+	// Delete the file
 	if err := os.Remove(filePath); err != nil {
 		fmt.Printf("Failed to delete file: %v\n", err)
 	}
@@ -49,34 +49,3 @@ func DownloadCsvFile(c *fiber.Ctx) error {
 		return nil
 			
 }
-/* 	// Delete the downloaded file
-	if err := deleteDownloadedFile(filePath); err != nil {
-		return err // Return the error directly
-	} */
-
-
-
-/* func deleteDownloadedFile(filePath string) error {
-	allowedDirectories := []string{"./downloads/CSV", "./downloads/XLSX", "./downloads/PDF", "./downloads/JSON"}
-	dirPath := filepath.Dir(filePath)
-
-	// Check if the directory path is within the expected downloads directory
-	validPath := false
-	for _, allowedDir := range allowedDirectories {
-		if dirPath == allowedDir {
-			validPath = true
-			break
-		}
-	}
-	if !validPath {
-		return fmt.Errorf("invalid directory path: %s", dirPath)
-	}
-
-	err := os.Remove(filePath)
-	if err != nil {
-		fmt.Println("failed to delete file:", err)
-		return err
-	}
-	fmt.Println("file deleted successfully:", filePath)
-	return nil
-} */

@@ -4,11 +4,12 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
     <title>hey</title>
 </head>
 <body>
+  {{template "partials/header" .}}
     
-    <h1>hey</h1>
 
     <form id="myForm" action="/process" method="POST">
 
@@ -35,6 +36,8 @@
     </form>
 
     
+    {{template "partials/footer" .}}
+
 
     <script>
        // Wait for the DOM to load
@@ -84,16 +87,7 @@ document.addEventListener('DOMContentLoaded', () => {
         downloadButton.href = `/download?filePath=${encodeURIComponent(filePath)}`; // Set the href of the download link to the file path
         downloadButton.download = ''; // Set the download attribute to enable downloading
 
-       /*  // Remove the file after it is downloaded
-        downloadButton.addEventListener('click', () => {
-          fetch('/deleteFile', {
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({ filePath: result.filePath })
-          });
-        }); */
+    
       } else {
         // Handle error response
         throw new Error('Error: ' + response.statusText);
