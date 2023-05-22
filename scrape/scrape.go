@@ -15,7 +15,7 @@ func ScrapeURL(url string) []string {
 	//colly
 	c := colly.NewCollector()
 
-	// Create a slice to hold the scraped data
+	// Create a slice to hold the scraped data because slices are built on top of arrays and we dont know what or how much we expect to get back from scraping
 	var scrapedData []string
 
 	c.OnHTML("a[href]", func(e *colly.HTMLElement) {
