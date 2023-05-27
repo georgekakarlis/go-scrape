@@ -11,6 +11,7 @@ func SetupRoutes(app *fiber.App) {
 	app.Get("/", handlers.IndexController)
 
 	//healthcheck
+	
 	app.Get("/api/healthchecker", func(c *fiber.Ctx) error {
 		return c.Status(200).JSON(fiber.Map{
 			"status":  "success",

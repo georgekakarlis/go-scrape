@@ -33,7 +33,7 @@ func GenerateCSV(data []string) (string, error) {
 }
 
 // GenerateXLSX generates an XLSX file from the scraped data and returns the file path
-func GenerateXLSX(/* data []string */) (/* string, error */) {
+func GenerateXLSX() {
 	/* fileName := fmt.Sprintf("%s.xlsx", time.Now().Format("2006-01-02_15-04-05"))
 	xlsxDir := "./downloads/XLSX"
 	if err := ensureDirectory(xlsxDir); err != nil {

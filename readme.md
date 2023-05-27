@@ -14,6 +14,11 @@ a few things to point out :
 3. maybe pricing model
 
 
+future todos : 
+Async scraper with ML(?) to know/understand which headers to use to facilitate the right combination of IPs and headers, CAPCHAs, and any other anti-scraping systems on each website call.
+
+
+
 
 the most "difficult" thing to do was to ensureDirectory and the whole download and os.Remove thing.
 

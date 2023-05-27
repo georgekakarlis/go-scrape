@@ -1,6 +1,9 @@
 package handlers
 
 import (
+	"net/url"
+	"regexp"
+
 	"github.com/gofiber/fiber/v2"
 	"goscrape.com/helpers"
 	"goscrape.com/scrape"
@@ -12,6 +15,7 @@ func ProcessForm(c *fiber.Ctx) error {
 	form := new(struct {
 		URL          string `form:"url"`
 		GenerateFILE string `form:"generateFILE"`
+		//specifiedItem string `form:"specifiedItem"`
 	})
 
 	if err := c.BodyParser(form); err != nil {
@@ -21,7 +25,12 @@ func ProcessForm(c *fiber.Ctx) error {
 	// Validate the URL entered by the user
 	// further regex validation ==TODO==
 	if form.URL == "" {
-		return c.Status(fiber.StatusBadRequest).SendString("Please enter a URL")
+		return c.Status(fiber.StatusBadRequest).SendString("Please enter a valid URL")
+	}		
+	
+	// Check if the URL is valid
+	if !ValidateURL(form.URL) {
+		return c.Status(fiber.StatusBadRequest).SendString("Please enter a valid URL")
 	}
 
 	// Scrape the URL
@@ -52,4 +61,34 @@ func ProcessForm(c *fiber.Ctx) error {
 	// Handle an invalid or unsupported format
 	return c.Status(fiber.StatusBadRequest).SendString("Invalid format selected")
 
+}
+
+
+// ^(http:\/\/www\.|https:\/\/www\.|http:\/\/|https:\/\/|\/|\/\/)?[A-z0-9_-]*?[:]?[A-z0-9_-]*?[@]?[A-z0-9]+([\-\.]{1}[a-z0-9]+)*\.[a-z]{2,5}(:[0-9]{1,5})?(\/.*)?$
+// ^(https?|ftp|file):\/\/[-A-Za-z0-9+&@#\/%?=~_|!:,.;]*[-A-Za-z0-9+&@#\/%=~_|]
+func ValidateURL(inputURL string) bool {
+	// Check if the URL is empty
+	if inputURL == "" {
+		return false
+	}
+
+	// Check if the URL is a valid format
+	_, err := url.ParseRequestURI(inputURL)
+	if err != nil {
+		return false
+	}
+
+	// Regex pattern for validating the URL
+	regexPattern := `^(http:\/\/www\.|https:\/\/www\.|http:\/\/|https:\/\/|\/|\/\/)?[A-z0-9_-]*?[:]?[A-z0-9_-]*?[@]?[A-z0-9]+([\-\.]{1}[a-z0-9]+)*\.[a-z]{2,5}(:[0-9]{1,5})?(\/.*)?$`
+
+	// Compile the regex pattern
+	regex, err := regexp.Compile(regexPattern)
+	if err != nil {
+		return false
+	}
+
+	// Match the regex pattern against the input URL
+	match := regex.MatchString(inputURL)
+
+	return match
 }

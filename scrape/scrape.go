@@ -8,9 +8,9 @@ import (
 )
 
 
-func ScrapeURL(url string) []string {
+func ScrapeURL(url string, ) []string {
 
-	
+	//MAKE THIS CODE WITH A SWITCH CASE TO SCRAPE BASED ON AHREF, DIV, P , Hs AND SO ON. 
 
 	//colly
 	c := colly.NewCollector()

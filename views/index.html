@@ -16,6 +16,9 @@
         <label for="url">Enter URL here</label>
         <input type="text" name="url" id="url" placeholder="URL">
 
+        <label for="specifiedItem">Locate the items : </label>
+        <input type="text" id="specifiedItem" name="specifiedItem">
+
         
             <input type="radio" name="generateFILE" id="generateCSV" value="generateCSV" required>
             <label for="generateCSV">Generate CSV</label>
@@ -55,6 +58,9 @@ document.addEventListener('DOMContentLoaded', () => {
     // Get the URL input value
     const url = document.getElementById('url').value;
 
+    // Get the item to be scraped
+    const specifiedItem = document.getElementById('specifiedItem').value;
+
     // Perform validation
     if (url === '') {
       alert('Please enter a URL');
@@ -64,6 +70,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // Create a data object to send to the backend
     const data = {
       url,
+      specifiedItem,
       generateFILE
     };
 
