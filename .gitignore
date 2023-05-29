@@ -45,3 +45,5 @@ logs.txt
 app.env
 tmp
 scrape.db
+.txt
+log.txt

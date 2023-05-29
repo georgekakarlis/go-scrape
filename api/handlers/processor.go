@@ -1,6 +1,7 @@
 package handlers
 
 import (
+	
 	"net/url"
 	"regexp"
 
@@ -23,12 +24,11 @@ func ProcessForm(c *fiber.Ctx) error {
 	}
 
 	// Validate the URL entered by the user
-	// further regex validation ==TODO==
 	if form.URL == "" {
 		return c.Status(fiber.StatusBadRequest).SendString("Please enter a valid URL")
 	}		
 	
-	// Check if the URL is valid
+	// Check if the URL is valid regex
 	if !ValidateURL(form.URL) {
 		return c.Status(fiber.StatusBadRequest).SendString("Please enter a valid URL")
 	}
@@ -92,3 +92,5 @@ func ValidateURL(inputURL string) bool {
 
 	return match
 }
+
+

@@ -2,6 +2,7 @@ package middlewares
 
 import (
 	"github.com/gofiber/fiber/v2"
+	"github.com/gofiber/fiber/v2/middleware/cors"
 	"github.com/gofiber/fiber/v2/middleware/logger"
 	"github.com/gofiber/fiber/v2/middleware/recover"
 	"github.com/gofiber/helmet/v2"
@@ -16,4 +17,5 @@ func SetMiddlewares(app *fiber.App) {
 			Format: "[${ip}]:${port} ${status} - ${method} ${path} ${latency}\n",
 		}))
 		app.Use(helmet.New()) //helmet middleware :)
+		app.Use(cors.New())
 }

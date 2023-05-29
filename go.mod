@@ -25,6 +25,7 @@ require (
 
 require (
 	github.com/gofiber/helmet/v2 v2.2.26
+	github.com/xuri/excelize/v2 v2.7.1
 	gorm.io/gorm v1.25.1
 )
 
@@ -37,7 +38,6 @@ require (
 	github.com/richardlehane/msoleps v1.0.3 // indirect
 	github.com/stretchr/testify v1.8.2 // indirect
 	github.com/xuri/efp v0.0.0-20220603152613-6918739fd470 // indirect
-	github.com/xuri/excelize/v2 v2.7.1 // indirect
 	github.com/xuri/nfp v0.0.0-20220409054826-5e722a1d9e22 // indirect
 	golang.org/x/crypto v0.8.0 // indirect
 )

@@ -8,28 +8,24 @@ import (
 	"goscrape.com/api/routes"
 	"goscrape.com/initializers"
 	"goscrape.com/middlewares"
+)
 
-	"github.com/gofiber/template/html/v2"
+var (
+    WarningLogger *log.Logger
+    InfoLogger    *log.Logger
+    ErrorLogger   *log.Logger
 )
 
 func init() {
 	initializers.ConnectDB()
+
 }
 
 func main() {
 
-	//load templates
-	engine := html.New("./views", ".html")
-	// Reload the templates on each render, good for development
-	engine.Reload(true)
-
 	// Create new Fiber instance
-	app := fiber.New(fiber.Config{
-		Views: engine,
-		ViewsLayout: "layouts/main",
-	})
+	app := fiber.New()
 
-	app.Static("/", "./public")
 
 	//set middlewares
 	middlewares.SetMiddlewares(app)
@@ -40,7 +36,15 @@ func main() {
 	if fromEnv := os.Getenv("PORT"); fromEnv != "" {
 		port = fromEnv
 	}
+
+
 	//serve
+	file, err := os.OpenFile("log.txt", os.O_CREATE|os.O_WRONLY|os.O_APPEND, 0666)
+    if err != nil {
+       log.Fatal(err)
+    }
+    defer file.Close()
+    log.SetOutput(file)
 	log.Printf("Starting up on http://localhost:%s", port)
 	log.Fatal(app.Listen(":" + port))
 }

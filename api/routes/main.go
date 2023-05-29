@@ -7,8 +7,8 @@ import (
 
 func SetupRoutes(app *fiber.App) {
 
-	//main route
-	app.Get("/", handlers.IndexController)
+	//main route now is handled by vite
+	//app.Get("/", handlers.IndexController)
 
 	//healthcheck
 	
@@ -20,10 +20,10 @@ func SetupRoutes(app *fiber.App) {
 	})
 
 	// POST to handle the form
-	app.Post("/process", handlers.ProcessForm)
+	app.Post("/api/process", handlers.ProcessForm)
 
 	// GET to handle the download of the ready made file
-	app.Get("/download", handlers.DownloadCsvFile)
+	app.Get("/api/download", handlers.DownloadCsvFile)
 
 	// 404 Handler
 	app.Use(func(c *fiber.Ctx) error {
