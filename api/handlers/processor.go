@@ -1,7 +1,6 @@
 package handlers
 
 import (
-	
 	"net/url"
 	"regexp"
 
@@ -14,9 +13,9 @@ import (
 func ProcessForm(c *fiber.Ctx) error {
 	// Retrieve the form data
 	form := new(struct {
-		URL          string `form:"url"`
-		GenerateFILE string `form:"generateFILE"`
-		//specifiedItem string `form:"specifiedItem"`
+		URL          string `json:"url"`
+		GenerateFILE string `json:"generateFILE"`
+		//SpecifiedItem string `json:"specifiedItem"`
 	})
 
 	if err := c.BodyParser(form); err != nil {
