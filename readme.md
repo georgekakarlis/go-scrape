@@ -1,5 +1,7 @@
 My golang-web scraper. 
 
+The frontEnd for this project lies in [web-goscrape](https://github.com/georgekakarlis/web-goscrape)
+
 Below is an image that quickly says what I need to write for 2 paragraphs.
 
 ![Diagram of the PWA](https://github.com/georgekakarlis/go-scrape/blob/main/Diagram.png?raw=true)
