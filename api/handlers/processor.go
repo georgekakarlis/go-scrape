@@ -6,6 +6,7 @@ import (
 
 	"github.com/gofiber/fiber/v2"
 	"goscrape.com/helpers"
+	"goscrape.com/logger"
 	"goscrape.com/scrape"
 )
 
@@ -34,6 +35,11 @@ func ProcessForm(c *fiber.Ctx) error {
 
 	// Scrape the URL
 	scrapedData := scrape.ScrapeURL(form.URL)
+
+	// Log the request details and save to the database
+	logger.LogRequest(c.IP(), form.URL)
+
+
 
 	// Check the output format requested by the user
 	switch form.GenerateFILE {

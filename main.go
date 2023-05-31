@@ -7,6 +7,7 @@ import (
 	"github.com/gofiber/fiber/v2"
 	"goscrape.com/api/routes"
 	"goscrape.com/initializers"
+	"goscrape.com/logger"
 	"goscrape.com/middlewares"
 )
 
@@ -18,10 +19,16 @@ var (
 
 func init() {
 	initializers.ConnectDB()
-
 }
 
 func main() {
+
+	// Initialize the Log DB
+	loggerErr := logger.InitializeDB()
+	if loggerErr != nil {
+		log.Fatal("Failed to connect to the Log Database! \n", loggerErr.Error())
+		os.Exit(1)
+	}
 
 	// Create new Fiber instance
 	app := fiber.New()

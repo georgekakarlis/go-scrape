@@ -18,7 +18,7 @@ func ConnectDB() {
 
 	DB, err = gorm.Open(sqlite.Open("scrape.db"), &gorm.Config{})
 	if err != nil {
-		log.Fatal("Failed to connect to the Database! \n", err.Error())
+		log.Fatal("Failed to connect to the Auth Database! \n", err.Error())
 		os.Exit(1)
 	}
 
@@ -27,7 +27,7 @@ func ConnectDB() {
 	log.Println("Running Migrations")
 	DB.AutoMigrate()
 
-	log.Println("🚀 Connected Successfully to the Database")
+	log.Println("🚀 Connected Successfully to the Auth Database")
 }
 
 

@@ -47,3 +47,4 @@ tmp
 scrape.db
 .txt
 log.txt
+request-log.db
