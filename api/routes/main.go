@@ -7,8 +7,13 @@ import (
 
 func SetupRoutes(app *fiber.App) {
 
-	//main route now is handled by vite
-	//app.Get("/", handlers.IndexController)
+	/* auth := app.Group("/auth")
+
+    // User routes
+    auth.Post("/register", handlers.Register)
+    auth.Post("/login", handlers.Login)
+    auth.Post("/logout", handlers.Logout)
+    auth.Post("/refresh", handlers.RefreshToken) */
 
 	//healthcheck
 	
@@ -25,17 +30,12 @@ func SetupRoutes(app *fiber.App) {
 	// GET to handle the download of the ready made file
 	app.Get("/api/download", handlers.DownloadCsvFile)
 
+
+
 	// 404 Handler
 	app.Use(func(c *fiber.Ctx) error {
 		return c.SendStatus(404) // => 404 "Not Found"
 	})
-	// setup the user group
-	//add the controllers		==TODO==
-	/* user := app.Group("/user")
-	user.Get("/")
-	user.Post("/")
-	user.Put("/:id")
-	user.Get("/:id")
-	user.Delete("/:id") */
+	
 
 }

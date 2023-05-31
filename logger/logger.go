@@ -40,7 +40,7 @@ func InitializeDB() error {
 		return err
 	}
 
-	log.Println("Connected to Log DB")
+	log.Println("💽 Connected to Log DB")
 	return nil
 }
 

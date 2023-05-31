@@ -18,7 +18,13 @@ var (
 )
 
 func init() {
-	initializers.ConnectDB()
+	config, err := initializers.LoadConfig(".")
+	if err != nil {
+		log.Fatal("? Could not load environment variables", err)
+	}
+
+	
+	initializers.ConnectDB(&config)
 }
 
 func main() {
@@ -26,7 +32,7 @@ func main() {
 	// Initialize the Log DB
 	loggerErr := logger.InitializeDB()
 	if loggerErr != nil {
-		log.Fatal("Failed to connect to the Log Database! \n", loggerErr.Error())
+		log.Fatal("💾  Failed to connect to the Log Database! \n", loggerErr.Error())
 		os.Exit(1)
 	}
 
@@ -52,6 +58,6 @@ func main() {
     }
     defer file.Close()
     log.SetOutput(file)
-	log.Printf("Starting up on http://localhost:%s", port)
+	log.Printf("🤖  Starting up on http://localhost:%s", port)
 	log.Fatal(app.Listen(":" + port))
 }
