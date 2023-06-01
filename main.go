@@ -1,14 +1,15 @@
 package main
 
 import (
+	"fmt"
 	"log"
 	"os"
 
 	"github.com/gofiber/fiber/v2"
 	"goscrape.com/api/routes"
-	"goscrape.com/initializers"
+	"goscrape.com/database"
 	"goscrape.com/logger"
-	"goscrape.com/middlewares"
+	middleware "goscrape.com/middlewares"
 )
 
 var (
@@ -17,15 +18,7 @@ var (
     ErrorLogger   *log.Logger
 )
 
-func init() {
-	config, err := initializers.LoadConfig(".")
-	if err != nil {
-		log.Fatal("? Could not load environment variables", err)
-	}
 
-	
-	initializers.ConnectDB(&config)
-}
 
 func main() {
 
@@ -39,9 +32,12 @@ func main() {
 	// Create new Fiber instance
 	app := fiber.New()
 
+	// db connec t
+	database.ConnectDB()
 
 	//set middlewares
-	middlewares.SetMiddlewares(app)
+	middleware.SetMiddlewares(app)
+	
 	// setup routes
 	routes.SetupRoutes(app)
 
@@ -59,5 +55,6 @@ func main() {
     defer file.Close()
     log.SetOutput(file)
 	log.Printf("🤖  Starting up on http://localhost:%s", port)
+	fmt.Printf(" 🤖Starting up on http://localhost:%s", port)
 	log.Fatal(app.Listen(":" + port))
 }

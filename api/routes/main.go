@@ -3,6 +3,7 @@ package routes
 import (
 	"github.com/gofiber/fiber/v2"
 	"goscrape.com/api/handlers"
+	middleware "goscrape.com/middlewares"
 )
 
 func SetupRoutes(app *fiber.App) {
@@ -31,6 +32,16 @@ func SetupRoutes(app *fiber.App) {
 	app.Get("/api/download", handlers.DownloadCsvFile)
 
 
+	// Auth
+	auth := app.Group("/auth")
+	auth.Post("/login", handlers.Login)
+
+	// User
+	user := app.Group("/user")
+	user.Get("/:id", handlers.GetUser)
+	user.Post("/", handlers.CreateUser)
+	user.Patch("/:id", middleware.Protected(), handlers.UpdateUser)
+	user.Delete("/:id", middleware.Protected(), handlers.DeleteUser)
 
 	// 404 Handler
 	app.Use(func(c *fiber.Ctx) error {

@@ -19,8 +19,14 @@ a few things to point out :
 future todos : 
 Async scraper with ML(?) to know/understand which headers to use to facilitate the right combination of IPs and headers, CAPCHAs, and any other anti-scraping systems on each website call.
 
-
-
+Auth Routes : 
+```
+POST /auth/login  = Login User
+POST /user = Create User
+PATCH /user/:id = Update User
+DELETE /user/:id    = Delete
+GET /user/:id, POST /user/, PATCH /user/:id, DELETE /user/:id protected with middlwares routes
+```
 
 the most "difficult" thing to do was to ensureDirectory and the whole download and os.Remove thing.
 
