@@ -67,6 +67,8 @@ func GetUser(c *fiber.Ctx) error {
 //If any errors occur during the process, appropriate error responses are returned.
 func CreateUser(c *fiber.Ctx) error {
 	type NewUser struct {
+		FirstName string `json:"firstname"`
+		LastName  string `json:"lastname"`
 		Username string `json:"username"`
 		Email    string `json:"email"`
 	}
@@ -93,6 +95,8 @@ func CreateUser(c *fiber.Ctx) error {
 	}
 
 	newUser := NewUser{
+		FirstName: user.FirstName,
+		LastName:  user.LastName,
 		Email:    user.Email,
 		Username: user.Username,
 	}
@@ -106,6 +110,8 @@ func CreateUser(c *fiber.Ctx) error {
 func UpdateUser(c *fiber.Ctx) error {
 	type UpdateUserInput struct {
 		Names string `json:"names"`
+		FirstName string `json:"firstname"`
+		LastName  string `json:"lastname"`
 	}
 	var uui UpdateUserInput
 	if err := c.BodyParser(&uui); err != nil {
