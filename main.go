@@ -5,11 +5,12 @@ import (
 	"log"
 	"os"
 
-	"github.com/gofiber/fiber/v2"
+	"github.com/gin-gonic/gin"
 	"goscrape.com/api/routes"
 	"goscrape.com/database"
+	"goscrape.com/initializers"
 	"goscrape.com/logger"
-	middleware "goscrape.com/middlewares"
+	"goscrape.com/middleware"
 )
 
 var (
@@ -18,6 +19,11 @@ var (
     ErrorLogger   *log.Logger
 )
 
+func init () {
+	initializers.LoadEnvVariables()
+	// db connec t
+	database.ConnectDB()
+}
 
 
 func main() {
@@ -30,16 +36,16 @@ func main() {
 	}
 
 	// Create new Fiber instance
-	app := fiber.New()
+	router := gin.Default()
 
-	// db connec t
-	database.ConnectDB()
+
+	
 
 	//set middlewares
-	middleware.SetMiddlewares(app)
+	middleware.SetMiddlewares(router)
 	
 	// setup routes
-	routes.SetupRoutes(app)
+	routes.SetupRoutes(router)
 
 	port := "8080"
 	if fromEnv := os.Getenv("PORT"); fromEnv != "" {
@@ -56,5 +62,5 @@ func main() {
     log.SetOutput(file)
 	log.Printf("🤖  Starting up on http://localhost:%s", port)
 	fmt.Printf(" 🤖Starting up on http://localhost:%s", port)
-	log.Fatal(app.Listen(":" + port))
+	log.Fatal(router.Run(":" + port))
 }

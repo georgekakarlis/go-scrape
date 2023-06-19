@@ -1,22 +1,23 @@
 version: '3.8'
+
 services:
   web:
     build: .
     env_file:
       - .env
     ports:
-      - 8080:8080
+      - "8080:8080"
     volumes:
-      - .:/usr/src/goscrape
-    command: air main.go -b 0.0.0.0
+      - .:/usr/src/app
+    command: air ./cmd/main.go -b 0.0.0.0
   db:
-    image: postgres:alpine
+    image: postgres:latest
     environment:
-      - POSTGRES_USER=${DB_USER}
+      - POSTGRES_USER=${DB_USER}  
       - POSTGRES_PASSWORD=${DB_PASSWORD}
       - POSTGRES_DB=${DB_NAME}
     ports:
-      - ${DB_PORT}:${DB_PORT}
+      - 5432:5432
     volumes:
       - postgres-db:/var/lib/postgresql/data
 

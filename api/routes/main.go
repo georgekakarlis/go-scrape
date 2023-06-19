@@ -1,52 +1,32 @@
 package routes
 
 import (
-	"github.com/gofiber/fiber/v2"
+	"github.com/gin-gonic/gin"
 	"goscrape.com/api/handlers"
-	middleware "goscrape.com/middlewares"
+	"goscrape.com/middleware"
 )
 
-func SetupRoutes(app *fiber.App) {
+func SetupRoutes(router *gin.Engine) {
 
-	/* auth := app.Group("/auth")
+	router.GET("/")
 
-    // User routes
-    auth.Post("/register", handlers.Register)
-    auth.Post("/login", handlers.Login)
-    auth.Post("/logout", handlers.Logout)
-    auth.Post("/refresh", handlers.RefreshToken) */
-
-	//healthcheck
-	
-	app.Get("/api/healthchecker", func(c *fiber.Ctx) error {
-		return c.Status(200).JSON(fiber.Map{
-			"status":  "success",
-			"message": "Since you are curious, dm us k? or not :)",
-		})
-	})
+	router.POST("/api/v1/signup", handlers.Signup)
+	router.POST("/api/v1/login", handlers.Login)
+	router.GET("/api/v1/validate", middleware.RequireAuth, handlers.Validate)
 
 	// POST to handle the form
-	app.Post("/api/process", handlers.ProcessForm)
+	router.POST("/api/v1/process", handlers.ProcessForm)
 
 	// GET to handle the download of the ready made file
-	app.Get("/api/download", handlers.DownloadCsvFile)
+	router.GET("/api/v1/download", handlers.DownloadCsvFile)
 
-
-	// Auth
-	auth := app.Group("/auth")
-	auth.Post("/login", handlers.Login)
-
-	// User
-	user := app.Group("/api/user")
-	user.Get("/:id", handlers.GetUser)
-	user.Post("/register", handlers.CreateUser)
-	user.Patch("/:id", middleware.Protected(), handlers.UpdateUser)
-	user.Delete("/:id", middleware.Protected(), handlers.DeleteUser)
 
 	// 404 Handler
-	app.Use(func(c *fiber.Ctx) error {
-		return c.SendStatus(404) // => 404 "Not Found"
+	router.NoRoute(func(c *gin.Context) {
+		c.Status(404) // => 404 "Not Found"
 	})
 	
 
 }
+
+
