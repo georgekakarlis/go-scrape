@@ -4,7 +4,6 @@ import (
 	"log"
 	"time"
 
-	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 )
 
@@ -31,10 +30,6 @@ func SetMiddlewares(router *gin.Engine) {
 			latency,
 		)
 	})
-	//cors
-			config := cors.DefaultConfig() // defaultconfig doesnot allow all origins, we still have to define which
-  			config.AllowOrigins = []string{"http://localhost:3000"}
-  	router.Use(cors.New(config))
 }
 
 

@@ -1,6 +1,6 @@
 package middleware
 
-import (
+/* import (
 	"fmt"
 	"net/http"
 	"os"
@@ -12,46 +12,71 @@ import (
 	"goscrape.com/models"
 )
 
+ func RequireAuth(router *gin.Context) {
 
-func RequireAuth( router *gin.Context) {
-	//get cookie of request
+
+	// Print the request headers
+	fmt.Println("Request Headers:")
+	for key, value := range router.Request.Header {
+		fmt.Printf("%s: %s\n", key, value)
+	}
+	fmt.Println("in middleware")
+	// Get the token from the cookie
 	tokenString, err := router.Cookie("Authorization")
-
 	if err != nil {
 		router.AbortWithStatus(http.StatusUnauthorized)
+
+		return
 	}
 
-	//decode/validate it
-	token, err := jwt.Parse(tokenString, func(token *jwt.Token) (interface{}, error) {
-	
-	if _, ok := token.Method.(*jwt.SigningMethodHMAC); !ok {
-		return nil, fmt.Errorf("Unexpected signing method: %v", token.Header["alg"])
-	}
+// Parse the token
+token, err := jwt.Parse(tokenString, func(token *jwt.Token) (interface{}, error) {
 
-	return []byte(os.Getenv("SECRET")), nil
-	})
 
-	if claims, ok := token.Claims.(jwt.MapClaims); ok && token.Valid {
-	//check the expiration
-	if float64(time.Now().Unix()) > claims["exp"].(float64) {
+    if _, ok := token.Method.(*jwt.SigningMethodHMAC); !ok {
+        return nil, fmt.Errorf("unexpected signing method: %v", token.Header["alg"])
+    }
+    fmt.Println("error 2")
+    return []byte(os.Getenv("SECRET")), nil
+})
+
+if err != nil || !token.Valid {
+
+    router.AbortWithStatus(http.StatusUnauthorized)
+    return
+}
+
+	// Extract claims
+	claims, ok := token.Claims.(jwt.MapClaims)
+if !ok {
+
+    router.AbortWithStatus(http.StatusUnauthorized)
+    return
+}
+
+	// Check token expiration
+	exp, ok := claims["exp"].(float64)
+	if !ok || float64(time.Now().Unix()) > exp {
+		fmt.Println("Token expired or invalid")
 		router.AbortWithStatus(http.StatusUnauthorized)
+		return
 	}
-	//find the user with token sub
+
+	// Retrieve user from database
 	var user models.User
 	database.DB.First(&user, claims["sub"])
 
 	if user.ID == 0 {
 		router.AbortWithStatus(http.StatusUnauthorized)
+		return
 	}
-	//attach to request
+
+	// Attach user to the request context
 	router.Set("user", user)
 
-	//continue
+	// Continue with the next middleware or handler
 	router.Next()
-	fmt.Println(claims["foo"], claims["nbf"])
-	} else {
-	router.AbortWithStatus(http.StatusUnauthorized)
-	}
-
-
 }
+
+
+*/

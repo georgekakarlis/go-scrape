@@ -1,5 +1,6 @@
 package handlers
 
+/*
 import (
 	"fmt"
 	"net/http"
@@ -12,7 +13,6 @@ import (
 	"goscrape.com/database"
 	"goscrape.com/models"
 )
-
 
 func Signup(router *gin.Context) {
 	//get the email/pass of req body
@@ -31,17 +31,20 @@ func Signup(router *gin.Context) {
 	}
 
 	//hash password
+	//If the request body is successfully bound to the body struct, the code continues to hash the password using the bcrypt package.
+	// It calls bcrypt.GenerateFromPassword to generate a secure hash of the password provided in the request body.
+	//The hash cost factor is set to 10, which determines the computational cost of the hash generation.
 	hash, err := bcrypt.GenerateFromPassword([]byte(body.Password), 10)
-	
+
 	if err != nil {
 		router.JSON(http.StatusBadRequest, gin.H{
 			"error" : "Failed to hash password",
 		})
 		return
-	} 
-	
+	}
 
-	//create the user 
+
+	//create the user
 	user := models.User{Email: body.Email, Password: string(hash), FirstName: body.FirstName, LastName: body.LastName}
 	result := database.DB.Create(&user)
 
@@ -57,8 +60,7 @@ func Signup(router *gin.Context) {
 	router.JSON(http.StatusOK, gin.H{})
 }
 
-
-func Login( router *gin.Context) {
+ func Login( router *gin.Context) {
 	//get email and pass of req body
 	var body struct {
 		Email string
@@ -100,10 +102,10 @@ func Login( router *gin.Context) {
 		"sub": user.ID,
 		"exp": time.Now().Add(time.Hour * 24 * 30).Unix(),
 	})
-	
+
 	// Sign and get the complete encoded token as a string using the secret
 	tokenString, err := token.SignedString([]byte(os.Getenv("SECRET")))
-	
+
 	if err != nil {
 		router.JSON(http.StatusBadRequest, gin.H{
 			"error" : "failed to create token",
@@ -112,15 +114,23 @@ func Login( router *gin.Context) {
 	}
 
 	//send it back
-	router.SetSameSite(http.SameSiteLaxMode)
-	router.SetCookie("Authorization", tokenString, 3600 * 24 *30, "", "", false, true)
-	router.JSON(http.StatusOK, gin.H{})
+	// Set the token as an HTTP-only and secure cookie
+	router.SetCookie("Authorization", tokenString, 3600*24*30, "/", "", false, false)
+	router.JSON(http.StatusOK, gin.H{
+		"message": "hey!",
+	})
+}
+
+func Logout(router *gin.Context) {
+	router.SetCookie("Authorization", "", -1, "", "", false, true)
+	router.JSON(http.StatusOK, gin.H{"message": "logout successful"})
 }
 
 
 func Validate( router *gin.Context) {
+
 	user, _ := router.Get("user")
 	router.JSON(http.StatusOK, gin.H{
 		"message": user,
 	})
-}
+} */

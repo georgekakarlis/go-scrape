@@ -38,9 +38,6 @@ func main() {
 	// Create new Fiber instance
 	router := gin.Default()
 
-
-	
-
 	//set middlewares
 	middleware.SetMiddlewares(router)
 	
