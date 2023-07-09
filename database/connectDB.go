@@ -1,6 +1,7 @@
 package database
 
 // dropped support for database & docker
+// keeping the files for future reference
 
 /*
 import (
