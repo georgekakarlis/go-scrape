@@ -1,5 +1,8 @@
 package database
 
+// dropped support for database & docker
+
+/*
 import (
 	"fmt"
 	"os"
@@ -11,13 +14,13 @@ import (
 )
 
 // DB gorm connector
-var DB *gorm.DB 
+var DB *gorm.DB
 
 // ConnectDB connects to the database
 func ConnectDB() {
-	
+
 	var err error
-	dsn := os.Getenv("DB") 
+	dsn := os.Getenv("DB")
 	DB, err = gorm.Open(postgres.Open(dsn), &gorm.Config{})
 	if err != nil {
 		panic("failed to connect to the database")
@@ -27,4 +30,4 @@ func ConnectDB() {
 	DB.AutoMigrate(&models.User{})
 	fmt.Println("Database Migrated")
 }
-
+*/

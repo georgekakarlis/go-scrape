@@ -4,32 +4,26 @@ import (
 	"log"
 	"time"
 
-	"github.com/gin-gonic/gin"
+	"github.com/gofiber/fiber/v2"
 )
 
+// LoggerMiddleware is a middleware that logs request details
+func LoggerMiddleware(ctx *fiber.Ctx) error {
+	start := time.Now()
 
+	err := ctx.Next()
 
-func SetMiddlewares(router *gin.Engine) {
-	// Attach middlewares
+	end := time.Now()
+	latency := end.Sub(start)
 
-	// Add a logger middleware with custom formatter
-	router.Use(func(c *gin.Context) {
-		start := time.Now()
+	log.Printf("[ %s ] %s - %s %s %d %s\n",
+		ctx.IP(),
+		end.Format(time.RFC3339),
+		ctx.Method(),
+		ctx.Path(),
+		ctx.Response().StatusCode(),
+		latency,
+	)
 
-		c.Next()
-
-		end := time.Now()
-		latency := end.Sub(start)
-
-		log.Printf("[ %s ] %s - %s %s %d %s\n",
-			c.ClientIP(),
-			end.Format(time.RFC3339),
-			c.Request.Method,
-			c.Request.URL.Path,
-			c.Writer.Status(),
-			latency,
-		)
-	})
+	return err
 }
-
-

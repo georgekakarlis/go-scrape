@@ -1,46 +1,45 @@
 package handlers
 
 import (
-	"net/http"
 	"net/url"
 	"regexp"
 
-	"github.com/gin-gonic/gin"
+	"github.com/gofiber/fiber/v2"
 	"goscrape.com/helpers"
 	"goscrape.com/logger"
 	"goscrape.com/scrape"
 )
 
 // ProcessForm handles the form submission
-func ProcessForm(router *gin.Context) {
+func ProcessForm(c *fiber.Ctx) error {
 	// Retrieve the form data
-	form := struct {
+	form := new(struct {
 		URL          string `json:"url"`
 		GenerateFILE string `json:"generateFILE"`
-	}{}
-		//shouldbindjson is the gin's bodyparser somehow
-	if err := router.ShouldBindJSON(&form); err != nil {
-		router.String(http.StatusBadRequest, "Invalid form data")
-		return
+		//SpecifiedItem string `json:"specifiedItem"`
+	})
+
+	if err := c.BodyParser(form); err != nil {
+		return c.Status(fiber.StatusBadRequest).SendString("Invalid form data")
 	}
 
 	// Validate the URL entered by the user
 	if form.URL == "" {
-		router.String(http.StatusBadRequest, "Please enter a valid URL")
-		return
-	}
+		return c.Status(fiber.StatusBadRequest).SendString("Please enter a valid URL")
+	}		
 
 	// Check if the URL is valid regex
 	if !ValidateURL(form.URL) {
-		router.String(http.StatusBadRequest, "Please enter a valid URL")
-		return
+		return c.Status(fiber.StatusBadRequest).SendString("Please enter a valid URL")
 	}
 
 	// Scrape the URL
 	scrapedData := scrape.ScrapeURL(form.URL)
 
-	// Log the request details and save to the database
-	logger.LogRequest(router.ClientIP(), form.URL)
+	// Log the request details and save to the sqlite
+	logger.LogRequest(c.IP(), form.URL)
+
+
 
 	// Check the output format requested by the user
 	switch form.GenerateFILE {
@@ -48,28 +47,22 @@ func ProcessForm(router *gin.Context) {
 		// Generate CSV output
 		fileName, err := helpers.MakeCSV(scrapedData)
 		if err != nil {
-			router.String(http.StatusInternalServerError, "Failed to generate CSV")
-			return
+			return c.Status(fiber.StatusInternalServerError).SendString("Failed to generate CSV")
 		}
-		router.JSON(http.StatusOK, gin.H{"filePath": fileName})
+		return c.JSON(fiber.Map{"filePath": fileName})
 
 	case "generateXLSX":
 		// generate Excel output
 
-	case "generatePDF":
-		// Generate PDF output and
-		// replace the return statement with the appropriate code
 
 	case "generateJSON":
 		// Default to JSON output
-		router.JSON(http.StatusOK, scrapedData)
-
-	default:
-		// Handle an invalid or unsupported format
-		router.String(http.StatusBadRequest, "Invalid format selected")
+		return c.JSON(scrapedData)
 	}
-}
 
+	// Handle an invalid or unsupported format
+	return c.Status(fiber.StatusBadRequest).SendString("Invalid format selected")
+}
 // ^(http:\/\/www\.|https:\/\/www\.|http:\/\/|https:\/\/|\/|\/\/)?[A-z0-9_-]*?[:]?[A-z0-9_-]*?[@]?[A-z0-9]+([\-\.]{1}[a-z0-9]+)*\.[a-z]{2,5}(:[0-9]{1,5})?(\/.*)?$
 // ^(https?|ftp|file):\/\/[-A-Za-z0-9+&@#\/%?=~_|!:,.;]*[-A-Za-z0-9+&@#\/%=~_|]
 func ValidateURL(inputURL string) bool {

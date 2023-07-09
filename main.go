@@ -5,12 +5,11 @@ import (
 	"log"
 	"os"
 
-	"github.com/gin-gonic/gin"
+	"github.com/gofiber/fiber/v2"
+	"github.com/gofiber/template/html/v2"
 	"goscrape.com/api/routes"
-	"goscrape.com/database"
 	"goscrape.com/initializers"
 	"goscrape.com/logger"
-	"goscrape.com/middleware"
 )
 
 var (
@@ -22,7 +21,7 @@ var (
 func init () {
 	initializers.LoadEnvVariables()
 	// db connec t
-	database.ConnectDB()
+	//database.ConnectDB()
 }
 
 
@@ -34,15 +33,18 @@ func main() {
 		log.Fatal("💾  Failed to connect to the Log Database! \n", loggerErr.Error())
 		os.Exit(1)
 	}
+	// Create a new engine
+	engine := html.New("./views", ".html")
+	// Create new fiber instance
+	app := fiber.New(fiber.Config{
+		Views: engine,
+	})
 
-	// Create new Fiber instance
-	router := gin.Default()
-
-	//set middlewares
-	middleware.SetMiddlewares(router)
+	app.Static("/", "./public")
 	
 	// setup routes
-	routes.SetupRoutes(router)
+	routes.SetupRoutes(app)
+	
 
 	port := "8080"
 	if fromEnv := os.Getenv("PORT"); fromEnv != "" {
@@ -59,5 +61,5 @@ func main() {
     log.SetOutput(file)
 	log.Printf("🤖  Starting up on http://localhost:%s", port)
 	fmt.Printf(" 🤖Starting up on http://localhost:%s", port)
-	log.Fatal(router.Run(":" + port))
+	log.Fatal(app.Listen(":" + port))
 }

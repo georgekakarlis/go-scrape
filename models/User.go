@@ -1,6 +1,8 @@
 package models
 
-import "gorm.io/gorm"
+//dropped support for models/db & docker
+
+/* import "gorm.io/gorm"
 
 // User struct
 type User struct {
@@ -10,3 +12,4 @@ type User struct {
 		Email     string `gorm:"unique;not null;size:255;" validate:"required,email" json:"email"`
 		Password  string `gorm:"not null;"`
 	}
+*/

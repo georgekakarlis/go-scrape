@@ -1,43 +1,41 @@
 package routes
 
 import (
-	"github.com/gin-contrib/cors"
-	"github.com/gin-gonic/gin"
+	"github.com/gofiber/fiber/v2"
 	"goscrape.com/api/handlers"
+	middleware "goscrape.com/middleware"
 )
 
-func SetupRoutes(router *gin.Engine) {
-	
-	
-	config := cors.DefaultConfig()
-	config.AllowOrigins = []string{"http://localhost:3000"}
-	config.AllowMethods = []string{"GET", "POST"}
-	config.AllowHeaders = []string{"Content-Type", "Authorization"}
-	config.AllowCredentials = true
+func SetupRoutes(app *fiber.App) {
 
-	// Apply CORS middleware
-	router.Use(cors.New(config))
-	//router.GET("/" , middleware.RequireAuth)
 
-	/* router.POST("/api/v1/signup", handlers.Signup)
-	router.POST("/api/v1/login", handlers.Login)
-	router.GET("/api/v1/validate", middleware.RequireAuth, handlers.Validate)
-	router.POST("/api/v1/logout", handlers.Logout) */
-	
+
+	app.Use(middleware.LoggerMiddleware)
+
+	app.Get("/", func (c *fiber.Ctx) error  {
+		return c.Render("index", fiber.Map{
+			"Title": "hello world",
+		})
+	})
+
+	//healthcheck
+	app.Get("/api/healthchecker", func(c *fiber.Ctx) error {
+		return c.Status(200).JSON(fiber.Map{
+			"status":  "success",
+			"message": "Never let your fears overcome your dreams",
+		})
+	})
 
 	// POST to handle the form
-	router.POST("/api/v1/process",  handlers.ProcessForm)
+	app.Post("/api/process", handlers.ProcessForm)
 
 	// GET to handle the download of the ready made file
-	router.GET("/api/v1/download",  handlers.DownloadCsvFile)
-
+	app.Get("/api/download", handlers.DownloadCsvFile)
 
 	// 404 Handler
-	router.NoRoute(func(c *gin.Context) {
-		c.Status(404) // => 404 "Not Found"
+	app.Use(func(c *fiber.Ctx) error {
+		return c.SendStatus(404) // => 404 "Not Found"
 	})
-	
+
 
 }
-
-
