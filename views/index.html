@@ -3,14 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/styles/styles.css">
     <title>GoScrape</title>
 </head>
 <body>
     {{template "partials/header" .}}
-    <h1>{{.Title}}</h1>
-    <form>
-        <h1>Search it</h1>
-    </form>
+    
+    {{template "partials/form" .}}
     {{template "partials/footer" .}}
 </body>
 </html>

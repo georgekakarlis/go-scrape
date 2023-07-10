@@ -53,7 +53,11 @@ func ProcessForm(c *fiber.Ctx) error {
 
 	case "generateXLSX":
 		// generate Excel output
-
+		fileName, err := helpers.MakeXLSX(scrapedData)
+		if err != nil {
+			return c.Status(fiber.StatusInternalServerError).SendString("Failed to generate XLSX")
+		}
+		return c.JSON(fiber.Map{"filePath": fileName})
 
 	case "generateJSON":
 		// Default to JSON output

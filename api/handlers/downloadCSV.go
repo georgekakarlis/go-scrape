@@ -9,7 +9,8 @@ import (
 	"github.com/gofiber/fiber/v2"
 )
 
-func DownloadCsvFile(c *fiber.Ctx) error {
+
+func DownloadFile(c *fiber.Ctx) error {
 	filePath := c.Query("filePath")
 
 	// Check if the filePath is empty
@@ -32,20 +33,28 @@ func DownloadCsvFile(c *fiber.Ctx) error {
 	fileSize := fileInfo.Size()
 
 	// Set the response headers
-	c.Set(fiber.HeaderContentType, "text/csv")
+	var contentType string
+	switch filepath.Ext(filePath) {
+	case ".csv":
+		contentType = "text/csv"
+	case ".xlsx":
+		contentType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+	default:
+		return c.Status(fiber.StatusBadRequest).SendString("invalid file type")
+	}
+	c.Set(fiber.HeaderContentType, contentType)
 	c.Set(fiber.HeaderContentDisposition, fmt.Sprintf("attachment; filename=%s", filepath.Base(filePath)))
 	c.Set(fiber.HeaderContentLength, strconv.FormatInt(fileSize, 10))
 
 	// Send the file as the response body
 	if err := c.SendFile(filePath); err != nil {
 		return err // Return the error directly
-		}
+	}
 
 	// Delete the file
 	if err := os.Remove(filePath); err != nil {
 		fmt.Printf("Failed to delete file: %v\n", err)
 	}
 
-		return nil
-
+	return nil
 }

@@ -27,10 +27,10 @@ func SetupRoutes(app *fiber.App) {
 	})
 
 	// POST to handle the form
-	app.Post("/api/process", handlers.ProcessForm)
+	app.Post("/api/v1/process", handlers.ProcessForm)
 
 	// GET to handle the download of the ready made file
-	app.Get("/api/download", handlers.DownloadCsvFile)
+	app.Get("/api/v1/download", handlers.DownloadFile)
 
 	// 404 Handler
 	app.Use(func(c *fiber.Ctx) error {
