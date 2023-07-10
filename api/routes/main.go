@@ -1,14 +1,21 @@
 package routes
 
 import (
+	"time"
+
 	"github.com/gofiber/fiber/v2"
+	"github.com/gofiber/fiber/v2/middleware/limiter"
 	"goscrape.com/api/handlers"
 	middleware "goscrape.com/middleware"
 )
 
 func SetupRoutes(app *fiber.App) {
 
-
+	// Limit each IP to 10 requests per minute
+    app.Use(limiter.New(limiter.Config{
+        Max:        5,
+        Expiration: 1 * time.Minute,
+    }))
 
 	app.Use(middleware.LoggerMiddleware)
 
