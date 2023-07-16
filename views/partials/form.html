@@ -66,9 +66,11 @@
     <form id="myForm">
         <div>
             <label for="url">Enter URL here</label>
-            <input type="text" id="url" />
+            <input type="url" id="url" pattern="https://.*" size="30"
+            required/>
             <p id="urlError" class="error" style="color: red;"></p>
         </div>
+        
 
         <div>
             <label>Generate File:</label>

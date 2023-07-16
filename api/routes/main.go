@@ -4,6 +4,7 @@ import (
 	"time"
 
 	"github.com/gofiber/fiber/v2"
+	"github.com/gofiber/fiber/v2/middleware/cors"
 	"github.com/gofiber/fiber/v2/middleware/limiter"
 	"goscrape.com/api/handlers"
 	middleware "goscrape.com/middleware"
@@ -11,18 +12,26 @@ import (
 
 func SetupRoutes(app *fiber.App) {
 
-	// Limit each IP to 10 requests per minute
-    app.Use(limiter.New(limiter.Config{
-        Max:        5,
-        Expiration: 1 * time.Minute,
-    }))
-
 	app.Use(middleware.LoggerMiddleware)
 
+	// Limit each IP to 5-10 requests per minute
+    app.Use(limiter.New(limiter.Config{
+		// CHANGE BEFORE FINISHED PROJECT
+        Max:        300,
+        Expiration: 1 * time.Minute,
+		LimitReached: func(c *fiber.Ctx) error {
+			return c.SendStatus(fiber.StatusTooManyRequests)
+		},
+    }))
+
+	app.Use(cors.New())
+
+
 	app.Get("/", func (c *fiber.Ctx) error  {
-		return c.Render("index", fiber.Map{
-			"Title": "hello world",
-		})
+		return c.Render("index", fiber.Map{})
+	})
+	app.Get("/about", func (c *fiber.Ctx) error  {
+		return c.Render("about", fiber.Map{})
 	})
 
 	//healthcheck
