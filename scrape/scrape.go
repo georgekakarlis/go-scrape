@@ -5,6 +5,7 @@ import (
 	"time"
 
 	"github.com/gocolly/colly/v2"
+	"github.com/gocolly/colly/v2/extensions"
 )
 
 
@@ -15,6 +16,10 @@ func ScrapeURL(url string, ) []string {
 	//colly
 	c := colly.NewCollector()
 
+
+    extensions.RandomUserAgent(c)
+  
+
 	// Create a slice to hold the scraped data because slices are built on top of arrays and we dont know what or how much we expect to get back from scraping
 	var scrapedData []string
 
@@ -23,7 +28,7 @@ func ScrapeURL(url string, ) []string {
 	})
 
 	// set a valid User-Agent header
-	c.UserAgent = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/111.0.0.0 Safari/537.36"
+	//c.UserAgent = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/111.0.0.0 Safari/537.36"
 
 	// timeout on request
 	c.SetRequestTimeout(120 * time.Second)
@@ -48,3 +53,5 @@ func ScrapeURL(url string, ) []string {
 	return scrapedData
 
 }
+
+

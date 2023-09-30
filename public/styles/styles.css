@@ -4,6 +4,7 @@ body {
   justify-content: space-between;
   min-height: 100vh;
   margin: 0;
+  background-color: cadetblue;
 }
 
 .nav-container {
@@ -11,7 +12,7 @@ body {
   justify-content: center;
   list-style: none;
   padding: 20px 0;
-  background: #f8f9fa;
+  
 }
 
 .nav-container a {
@@ -21,7 +22,7 @@ body {
 }
 
 footer {
-  background: #f8f9fa;
+  
   padding: 10px 0;
   position: sticky;
   bottom: 0;

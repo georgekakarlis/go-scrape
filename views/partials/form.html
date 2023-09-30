@@ -70,6 +70,25 @@
             required/>
             <p id="urlError" class="error" style="color: red;"></p>
         </div>
+
+        <div>
+            <label for="url">What you want to scrape?</label>
+            <div>
+                <input type="radio" id="scrapeHTML" value="scrapeHTML" name="scraping" />
+                <label for="generateCSV">All HTML</label>
+            </div>
+            <div>
+                <input type="radio" id="generateXLSX" value="generateXLSX" name="generateFile" />
+                <label for="generateXLSX">All DIVs</label>
+            </div>
+            <div>
+                
+                <label for="generatePDF">Special Class, IDs</label>
+                <input type="url" id="url" pattern="https://.*" size="30"
+            />
+            </div>
+            
+        </div>
         
 
         <div>
@@ -90,7 +109,7 @@
                 <input type="radio" id="generateJSON" value="generateJSON" name="generateFile" />
                 <label for="generateJSON">Generate JSON</label>
             </div>
-            <p id="fileTypeError" class="error"></p>
+            <p id="fileTypeError" class="error" style="color: red;"></p>
         </div>
 
         <div>
